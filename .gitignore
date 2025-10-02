@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv/
+venv/
+pip-wheel-metadata/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Tests & coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Docker
+*.tar
+dist/
+build/
+
+# Node (if you add tooling later)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Terraform
+terraform.tfstate
+terraform.tfstate.*
+.crash
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+
+# Helm
+charts/**/Chart.lock
+charts/**/charts/
+
+# Jenkins & CI
+**/workspace/
