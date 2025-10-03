@@ -1,9 +1,0 @@
-this is the instructuions and manual for this project that I am doing
-
-for step 0, I did the skeleton of the project in my local machine and then coded 3 files
-README.md, .gitignore, and PULL_REQUEST_TEMPLATE.md
-
-Used git commands init,add and did my first commmit.
-
-
-
