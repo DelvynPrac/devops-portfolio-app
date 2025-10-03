@@ -14,4 +14,4 @@ A production-style portfolio site implemented as a **DevOps practice project**:
 - Helm chart deploys to **dev** namespace with probes
 - Tag `v0.1.0` from `main` → promote to **prod**
 
-## Repo layout (planned)
+# Repo layout (planned)

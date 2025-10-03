@@ -45,3 +45,5 @@ charts/**/charts/
 
 # Jenkins & CI
 **/workspace/
+
+notesx.txt

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "Delvyn Jones • DevOps Portfolio" }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+  <header class="p-4 bg-gray-800">
+    <nav class="flex gap-4">
+      <a href="/" class="hover:underline">Home</a>
+      <a href="/about" class="hover:underline">About</a>
+    </nav>
+  </header>
+
+  <main class="p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="p-4 bg-gray-800 text-sm text-gray-400 text-center">
+    © 2025 Delvyn Jones
+  </footer>
+</body>
+</html>
