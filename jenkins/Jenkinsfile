@@ -3,41 +3,56 @@ pipeline {
 
   environment {
     IMAGE = "docker.io/${DOCKERHUB_USER}/flask-portfolio"
-    PYTHON = "python3"
   }
 
-  options { timestamps(); ansiColor('xterm') }
+  options { timestamps() }
 
   stages {
-    stage('Checkout') { steps { checkout scm } }
+    stage('Checkout') {
+      steps { checkout scm }
+    }
 
     stage('Unit Tests') {
       steps {
-        sh """
-          ${PYTHON} -m pip install --upgrade pip
-          ${PYTHON} -m pip install -r requirements.txt
-          pytest -q
-        """
+        sh '''
+          python3 -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pytest -q
+        '''
       }
     }
 
     stage('Build Image') {
       steps {
-        sh "docker build -f docker/Dockerfile -t ${IMAGE}:${env.GIT_COMMIT} ."
+        sh 'docker build -f docker/Dockerfile -t ${IMAGE}:${GIT_COMMIT} .'
       }
     }
 
     stage('Login & Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
-          sh """
+          sh '''
             echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin
             docker push ${IMAGE}:${GIT_COMMIT}
-            if [ "${BRANCH_NAME}" = "main" ]; then
-              docker tag ${IMAGE}:${GIT_COMMIT} ${IMAGE}:prod
-              docker push ${IMAGE}:prod
-            fi
-          """
+          '''
+          script {
+            // Detect branch for single-branch pipeline jobs
+            def branch = sh(returnStdout: true, script: "git rev-parse --abbrev-ref HEAD").trim()
+            echo "Detected branch: ${branch}"
+            if (branch == 'main' || branch == 'origin/main') {
+              sh """
+                docker tag ${IMAGE}:${GIT_COMMIT} ${IMAGE}:prod
+                docker push ${IMAGE}:prod
+              """
+            } else if (branch == 'develop' || branch == 'origin/develop') {
+              sh """
+                docker tag ${IMAGE}:${GIT_COMMIT} ${IMAGE}:dev
+                docker push ${IMAGE}:dev
+              """
+            }
+          }
         }
       }
     }
@@ -47,5 +62,8 @@ pipeline {
     always {
       sh 'docker image ls | head -n 10 || true'
     }
+    cleanup {
+      sh 'docker image prune -f || true'
+    }
   }
- 
+}
