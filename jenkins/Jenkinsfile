@@ -14,11 +14,9 @@ pipeline {
     stage('Unit Tests') {
       steps {
         sh """
-          python3 -m venv .venv
-          . .venv/bin/activate
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          python -m pytest -q 
+          ${PYTHON} -m pip install --upgrade pip
+          ${PYTHON} -m pip install -r requirements.txt
+          pytest -q
         """
       }
     }
@@ -50,4 +48,4 @@ pipeline {
       sh 'docker image ls | head -n 10 || true'
     }
   }
-}
+ 
